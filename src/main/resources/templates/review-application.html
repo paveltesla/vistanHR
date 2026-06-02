@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Рассмотрение отклика — Вистан</title>
+    <th:block th:replace="~{fragments :: header-css}"></th:block>
+    <style>
+        .sticky-panel { position: sticky; top: 20px; z-index: 100; }
+        .info-table th { width: 200px; background: #f8f9fa; }
+    </style>
+</head>
+<body>
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<main class="container mt-4">
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show shadow-sm">
+        <i class="fas fa-check-circle"></i> <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show shadow-sm">
+        <i class="fas fa-exclamation-circle"></i> <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${application == null}" class="alert alert-warning shadow-sm">
+        <i class="fas fa-exclamation-triangle"></i> Отклик соискателя не найден или был удален.
+        <a href="/admin/applications" class="btn btn-sm btn-outline-dark ms-2">К списку откликов</a>
+    </div>
+
+    <div class="row" th:if="${application != null}">
+        <div class="col-md-8">
+            <div class="card mb-4 shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user"></i> Карточка соискателя</h4>
+                </div>
+                <div class="card-body">
+
+                    <h5 class="mb-3 text-primary"><i class="fas fa-info-circle"></i> Информация о целевой должности</h5>
+                    <table class="table table-bordered info-table align-middle">
+                        <tr>
+                            <th>Вакансия компании</th>
+                            <td>
+                                <strong th:if="${application.vacancy != null}" th:text="${application.vacancy.title}">Название</strong>
+                                <span th:unless="${application.vacancy != null}" class="text-muted">Вакансия удалена из архива</span>
+                                <span th:if="${application.vacancy != null}" class="ms-2">
+                                    <span th:if="${application.vacancy.vacancyType == 'EMPLOYEE'}" class="badge bg-primary">Офис / ИТР</span>
+                                    <span th:if="${application.vacancy.vacancyType == 'WORKER'}" class="badge bg-success">Рабочий</span>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr th:if="${application.vacancy != null}">
+                            <th>Производственный цех / Отдел</th>
+                            <td th:text="${application.vacancy.department}">Отдел</td>
+                        </tr>
+                        <tr>
+                            <th>Заявленная позиция</th>
+                            <td>
+                                <span th:if="${application.position != null and !application.position.isEmpty()}" th:text="${application.position}"></span>
+                                <span th:unless="${application.position != null and !application.position.isEmpty()}" class="text-muted">—</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Дата подачи анкеты</th>
+                            <td th:text="${application.applicationDate != null ? #temporals.format(application.applicationDate, 'dd.MM.yyyy HH:mm') : 'Не указана'}">Дата</td>
+                        </tr>
+                        <tr>
+                            <th>Текущий статус отклика</th>
+                            <td>
+                                <span th:if="${application.applicationStatus == 'PENDING'}" class="badge bg-warning text-dark">На рассмотрении</span>
+                                <span th:if="${application.applicationStatus == 'REVIEWED'}" class="badge bg-info text-dark">Просмотрено</span>
+                                <span th:if="${application.applicationStatus == 'INTERVIEW'}" class="badge bg-primary">Назначено собеседование</span>
+                                <span th:if="${application.applicationStatus == 'ACCEPTED'}" class="badge bg-success">Принят на работу</span>
+                                <span th:if="${application.applicationStatus == 'REJECTED'}" class="badge bg-danger">Отклонен</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h5 class="mb-3 text-primary mt-4"><i class="fas fa-address-book"></i> Личные контакты соискателя</h5>
+                    <table class="table table-bordered info-table align-middle">
+                        <tr>
+                            <th>ФИО кандидата</th>
+                            <td><strong th:text="${application.fullName}">ФИО</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Электронная почта</th>
+                            <td>
+                                <span th:text="${application.email}">email</span>
+                                <a th:if="${application.email != null}" th:href="'mailto:' + ${application.email}" class="btn btn-sm btn-outline-secondary ms-2">
+                                    <i class="fas fa-envelope"></i> Написать письмо
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Контактный телефон</th>
+                            <td>
+                                <span th:text="${application.phone}">телефон</span>
+                                <a th:if="${application.phone != null}" th:href="'tel:' + ${application.phone}" class="btn btn-sm btn-outline-secondary ms-2">
+                                    <i class="fas fa-phone"></i> Позвонить
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h5 class="mb-3 text-primary mt-4"><i class="fas fa-briefcase"></i> Профессиональный профиль</h5>
+                    <table class="table table-bordered info-table align-middle">
+                        <tr>
+                            <th>Стаж работы</th>
+                            <td>
+                                <span th:if="${application.experience != null && application.experience > 0}" th:text="${application.experience} + ' лет'"></span>
+                                <span th:unless="${application.experience != null && application.experience > 0}" class="text-muted">Без опыта работы</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Ожидания по зарплате</th>
+                            <td>
+                                <span th:if="${application.expectedSalary != null}"
+                                      th:text="${#numbers.formatDecimal(application.expectedSalary, 0, 'COMMA', 2, 'POINT')} + ' BYN'">0</span>
+                                <span th:unless="${application.expectedSalary != null}" class="text-muted">Не указаны</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Ключевые навыки</th>
+                            <td>
+                                <span th:if="${application.skills != null and !application.skills.isEmpty()}" th:text="${application.skills}"></span>
+                                <span th:unless="${application.skills != null and !application.skills.isEmpty()}" class="text-muted">Не заполнены</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div th:if="${application.coverLetter != null and !application.coverLetter.isEmpty()}" class="mt-4">
+                        <h5 class="mb-3 text-primary"><i class="fas fa-envelope-open-text"></i> Сопроводительное письмо</h5>
+                        <div class="p-3 bg-light rounded border" style="white-space: pre-wrap;" th:text="${application.coverLetter}"></div>
+                    </div>
+
+                    <div th:if="${application.resume != null and !application.resume.isEmpty()}" class="mt-4">
+                        <h5 class="mb-3 text-primary"><i class="fas fa-file-alt"></i> Текст резюме</h5>
+                        <div class="p-3 bg-light rounded border" style="white-space: pre-wrap; max-height: 400px; overflow-y: auto;" th:text="${application.resume}"></div>
+                    </div>
+
+                    <div th:if="${application.reviewNotes != null and !application.reviewNotes.isEmpty()}" class="mt-4">
+                        <h5 class="mb-3 text-warning"><i class="fas fa-sticky-note"></i> Предыдущие примечания к решению</h5>
+                        <div class="p-3 bg-warning bg-opacity-10 rounded border border-warning" style="white-space: pre-wrap;" th:text="${application.reviewNotes}"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card sticky-panel shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-balance-scale"></i> Решение по кандидату</h5>
+                </div>
+                <div class="card-body">
+
+                    <form th:action="@{/admin/applications/review/{id}(id=${application.id})}" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Установить статус *</label>
+                            <select name="status" class="form-select form-select-lg" required>
+                                <option value="PENDING" th:selected="${application.applicationStatus == 'PENDING'}">На рассмотрении</option>
+                                <option value="REVIEWED" th:selected="${application.applicationStatus == 'REVIEWED'}">Просмотрено</option>
+                                <option value="INTERVIEW" th:selected="${application.applicationStatus == 'INTERVIEW'}">Собеседование</option>
+                                <option value="ACCEPTED" th:selected="${application.applicationStatus == 'ACCEPTED'}">Принят на работу</option>
+                                <option value="REJECTED" th:selected="${application.applicationStatus == 'REJECTED'}">Отклонить отклик</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Рабочие заметки / Причины</label>
+                            <textarea name="reviewNotes" class="form-control" rows="4"
+                                      placeholder="Например: Опыт на станках ЧПУ 3 года, пригласить на очное интервью во вторник..."
+                                      th:text="${application.reviewNotes != null ? application.reviewNotes : ''}"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 mb-3 shadow-sm">
+                            <i class="fas fa-save"></i> Сохранить решение
+                        </button>
+
+                        <hr>
+
+                        <a th:if="${application.vacancy != null}" th:href="@{/admin/vacancies/{id}/applications(id=${application.vacancy.id})}"
+                           class="btn btn-outline-primary btn-sm w-100 mb-2">
+                            <i class="fas fa-arrow-left"></i> Все отклики на эту вакансию
+                        </a>
+
+                        <a href="/admin/applications" class="btn btn-outline-secondary btn-sm w-100 mb-2">
+                            <i class="fas fa-list"></i> К общему списку откликов
+                        </a>
+
+                        <a th:href="@{/admin/applications/delete/{id}(id=${application.id})}"
+                           class="btn btn-outline-danger btn-sm w-100"
+                           onclick="return confirm('Внимание! Данные кандидата будут безвозвратно удалены из системы. Продолжить?')">
+                            <i class="fas fa-trash"></i> Удалить анкету соискателя
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+<div th:replace="~{fragments :: scripts}"></div>
+<script>
+    // Скрипт автоматического скрытия алертов через 5 секунд работает штатно
+    setTimeout(function() {
+        document.querySelectorAll('.alert-dismissible').forEach(function(el) {
+            let alert = bootstrap.Alert.getInstance(el);
+            if (!alert) alert = new bootstrap.Alert(el);
+            alert.close();
+        });
+    }, 5000);
+</script>
+</body>
+</html>

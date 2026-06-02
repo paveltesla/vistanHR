@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="header-css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Flexbox-верстка для идеального футера */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Растягивает body на весь экран */
+            margin: 0;
+        }
+        main {
+            flex: 1 0 auto; /* Заставляет контент занимать всё свободное место, выталкивая футер вниз */
+        }
+        footer {
+            flex-shrink: 0; /* Не дает футеру сжиматься */
+        }
+        .card-hover:hover { transform: translateY(-5px); transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .vacancy-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    </style>
+</head>
+
+<body>
+
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-building"></i> Вистан</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" href="/admin/applications/dashboard"><i class="fas fa-lock"></i> Админ</a>
+        </div>
+    </div>
+</nav>
+
+<nav th:fragment="navbar-admin" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/"><i class="fas fa-building"></i> Вистан</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="/admin"><i class="fas fa-tachometer-alt"></i> Дашборд</a></li>
+                <li class="nav-item"><a class="nav-link" href="admin/vacancies/"><i class="fas fa-briefcase"></i> Вакансии</a></li>
+                <li class="nav-item"><a class="nav-link" href="/admin/applications"><i class="fas fa-file-alt"></i> Отклики</a></li>
+                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i> Выход</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<footer th:fragment="footer" class="text-white text-center py-3 mt-5 bg-dark bg-opacity-25">
+    <p class="mb-0">&copy; 2026 Вистан Все права защищены</p>
+</footer>
+
+<div th:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+
+</body>
+</html>

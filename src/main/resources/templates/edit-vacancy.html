@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование вакансии — Вистан</title>
+    <th:block th:replace="~{fragments :: header-css}"></th:block>
+</head>
+<body>
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<main class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0"><i class="fas fa-edit"></i> Редактирование вакансии #<span th:text="${vacancy.id}"></span></h4>
+                </div>
+                <div class="card-body">
+
+                    <form th:action="@{/admin/vacancies/edit/{id}(id=${vacancy.id})}" th:object="${vacancy}" method="post">
+
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Название вакансии *</label>
+                            <input type="text" th:field="*{title}" class="form-control" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Подразделение / Цех *</label>
+                                <select th:field="*{department}" class="form-select" required>
+                                    <option value="Механический цех">Механический цех</option>
+                                    <option value="Литейный цех">Литейный цех</option>
+                                    <option value="Сборочный цех">Сборочный цех</option>
+                                    <option value="Конструкторско-технологический отдел">Конструкторско-технологический отдел (КТО)</option>
+                                    <option value="Отдел технического контроля">Отдел технического контроля (ОТК)</option>
+                                    <option value="Администрация / Бухгалтерия">Администрация / Бухгалтерия</option>
+                                    <option value="Служба главного инженера">Служба главного инженера</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Категория персонала *</label>
+                                <select th:field="*{vacancyType}" class="form-select" required>
+                                    <option value="EMPLOYEE">Офисный сотрудник / ИТР</option>
+                                    <option value="WORKER">Рабочий персонал</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Мин. зарплата (BYN)</label>
+                                <input type="number" th:field="*{salaryMin}" class="form-control" min="0">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Макс. зарплата (BYN)</label>
+                                <input type="number" th:field="*{salaryMax}" class="form-control" min="0">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Опыт (лет)</label>
+                                <input type="number" th:field="*{requiredExperience}" class="form-control" min="0">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Режим работы</label>
+                                <select th:field="*{workSchedule}" class="form-select">
+                                    <option value="">Выберите...</option>
+                                    <option value="FULL_TIME">Полный день (односменный)</option>
+                                    <option value="PART_TIME">Частичная занятость</option>
+                                    <option value="SHIFT">Сменный график (2/2, трехсменный)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Тип оформления</label>
+                                <select th:field="*{employmentType}" class="form-select">
+                                    <option value="">Выберите...</option>
+                                    <option value="PERMANENT">Постоянная занятость</option>
+                                    <option value="CONTRACT">Контрактная форма</option>
+                                    <option value="TEMPORARY">Временная работа / Подработка</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Место работы</label>
+                            <input type="text" th:field="*{location}" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Статус вакансии</label>
+                            <select th:field="*{status}" class="form-select">
+                                <option value="OPEN">Открыта</option>
+                                <option value="CLOSED">Закрыта</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3"><label class="form-label">Описание</label><textarea th:field="*{description}" class="form-control" rows="3"></textarea></div>
+                        <div class="mb-3"><label class="form-label">Требования</label><textarea th:field="*{requirements}" class="form-control" rows="3"></textarea></div>
+                        <div class="mb-3"><label class="form-label">Обязанности</label><textarea th:field="*{responsibilities}" class="form-control" rows="3"></textarea></div>
+
+                        <div class="mb-3"><label class="form-label">Дополнительные примечания</label><textarea th:field="*{notes}" class="form-control" rows="2"></textarea></div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/admin/vacancies" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-arrow-left"></i> Отмена
+                            </a>
+                            <button type="submit" class="btn btn-warning btn-lg text-dark">
+                                <i class="fas fa-save"></i> Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<div th:replace="~{fragments :: scripts}"></div>
+</body>
+</html>

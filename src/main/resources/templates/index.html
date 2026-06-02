@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Вистан — Главная</title>
+    <th:block th:replace="~{fragments :: header-css}"></th:block>
+</head>
+<body>
+
+<nav th:replace="~{fragments :: navbar}"></nav>
+
+<main class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="text-center text-white mb-5">
+                <h1>Добро пожаловать в Вистан</h1>
+                <p class="lead">Присоединяйтесь к нашей команде</p>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card card-hover text-center bg-primary text-white">
+                        <div class="card-body p-4">
+                            <i class="fas fa-briefcase fa-3x mb-3"></i>
+                            <h3 th:text="${#lists.size(openVacancies)}">0</h3>
+                            <p>Открытых вакансий</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card card-hover text-center bg-success text-white">
+                        <div class="card-body p-4">
+                            <i class="fas fa-users fa-3x mb-3"></i>
+                            <h3>500+</h3>
+                            <p>Сотрудников</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><h4><i class="fas fa-bullhorn text-primary"></i> Открытые вакансии</h4></div>
+                <div class="card-body">
+                    <div th:if="${not #lists.isEmpty(openVacancies)}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3" th:each="v : ${openVacancies}">
+                                <div class="card vacancy-card h-100 border-primary">
+                                    <div class="card-body">
+                                        <h5 class="text-primary" th:text="${v.title}"></h5>
+                                        <p class="text-muted"><i class="fas fa-building"></i> <span th:text="${v.department}"></span></p>
+                                        <p th:if="${v.salaryMin > 0 || v.salaryMax > 0}">
+                                            <i class="fas fa-money-bill-wave text-success"></i>
+                                            <strong>
+                                                <span th:if="${v.salaryMin > 0}" th:text="${#numbers.formatDecimal(v.salaryMin,0,'COMMA',2,'POINT')}"></span>
+                                                <span th:if="${v.salaryMax > 0}"> - <span th:text="${#numbers.formatDecimal(v.salaryMax,0,'COMMA',2,'POINT')}"></span></span>
+                                                BYN
+                                            </strong>
+                                        </p>
+                                        <p th:if="${v.requiredExperience > 0}"><i class="fas fa-briefcase text-info"></i> Опыт: от <span th:text="${v.requiredExperience}"></span> лет</p>
+                                        <p th:if="${v.location != null and !v.location.isEmpty()}"><i class="fas fa-map-marker-alt text-danger"></i> <span th:text="${v.location}"></span></p>
+                                        <p class="small text-muted" th:if="${v.description != null}" th:text="${#strings.abbreviate(v.description, 100)}"></p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <span class="badge" th:classappend="${v.vacancyType == 'EMPLOYEE' ? 'bg-primary' : 'bg-success'}" th:text="${v.vacancyType == 'EMPLOYEE' ? 'Офис' : 'Рабочий'}"></span>
+                                            <a th:href="@{/applications/apply/{id}(id=${v.id})}" class="btn btn-primary btn-sm"><i class="fas fa-paper-plane"></i> Откликнуться</a>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer small text-muted">
+                                        <i class="fas fa-clock"></i> <span th:text="${#temporals.format(v.createdDate, 'dd.MM.yyyy')}"></span>
+                                        <span class="float-end" th:if="${v.applicationsCount > 0}"><i class="fas fa-users"></i> <span th:text="${v.applicationsCount}"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:unless="${not #lists.isEmpty(openVacancies)}" class="text-center py-5">
+                        <h5 class="text-muted">Нет открытых вакансий</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/vacancies/public" class="btn btn-outline-light btn-lg me-2"><i class="fas fa-list"></i> Все вакансии</a>
+                <a href="/admin/applications/dashboard" class="btn btn-outline-light btn-lg"><i class="fas fa-lock"></i> Админ</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<div th:replace="~{fragments :: scripts}"></div>
+
+</body>
+</html>
