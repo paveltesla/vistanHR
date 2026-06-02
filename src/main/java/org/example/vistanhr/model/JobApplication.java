@@ -66,4 +66,7 @@ public class JobApplication {
     @Column(name = "review_notes", length = 1000)
     private String reviewNotes;
 
+    @Column(name = "position")
+    private String position;
+
 }

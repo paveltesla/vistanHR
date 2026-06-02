@@ -23,7 +23,7 @@ public class WorkerController {
         Worker worker = workerRepository.findById(id).orElse(null);
 
         if (worker == null) {
-            redirectAttributes.addFlashAttribute("error", "Рабочий с ID " + id + " не найден.");
+            redirectAttributes.addFlashAttribute("error_mess", "Рабочий с ID " + id + " не найден.");
             return "redirect:/workers"; // Или на ту страницу, где у тебя список рабочих
         }
 
@@ -40,7 +40,7 @@ public class WorkerController {
         Worker worker = workerRepository.findById(id).orElse(null);
 
         if (worker == null) {
-            redirectAttributes.addFlashAttribute("error", "Ошибка: Рабочий не найден.");
+            redirectAttributes.addFlashAttribute("error_mess", "Ошибка: Рабочий не найден.");
             return "redirect:/workers";
         }
 

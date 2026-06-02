@@ -42,9 +42,9 @@
             <div th:unless="${not #lists.isEmpty(applications)}" class="text-center py-4"><h5>Нет откликов</h5></div>
         </div>
     </div>
-    <div class="text-center mt-3"><a href="/admin/applications" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> К вакансиям</a></div>
+    <div class="text-center mt-3"><a th:href="@{/admin/applications}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> К вакансиям</a></div>
 </div>
 <footer th:replace="~{fragments :: footer}"></footer>
-<div th:replace="~{fragments :: scripts}"></div>
+<script th:replace="~{fragments :: script}"></script>
 </body>
 </html>

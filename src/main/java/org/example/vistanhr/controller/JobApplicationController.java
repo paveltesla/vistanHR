@@ -30,19 +30,19 @@ public class JobApplicationController {
         Vacancy vacancy = vacancyRepository.findById(vacancyId).orElse(null);
 
         if (vacancy == null) {
-            redirectAttributes.addFlashAttribute("error", "Вакансия не найдена!");
+            redirectAttributes.addFlashAttribute("error_mess", "Вакансия не найдена!");
             return "redirect:/";
         }
 
         model.addAttribute("vacancy", vacancy);
-        model.addAttribute("application", new JobApplication()); // Инициализируем th:object="${application}"
+        model.addAttribute("applications", new JobApplication()); // Инициализируем th:object="${application}"
 
         return "apply-vacancy"; // Имя твоего HTML файла формы
     }
 
     // 2. Обработка отправки формы
     @PostMapping("/apply")
-    public String handleApply(@Valid @ModelAttribute("application") JobApplication application,
+    public String handleApply(@Valid @ModelAttribute("applications") JobApplication application,
                               BindingResult bindingResult,
                               @RequestParam("vacancyId") Long vacancyId,
                               Model model,
@@ -57,7 +57,7 @@ public class JobApplicationController {
         }
 
         if (vacancy == null) {
-            redirectAttributes.addFlashAttribute("error", "Ошибка: Вакансия не существует.");
+            redirectAttributes.addFlashAttribute("error_mess", "Ошибка: Вакансия не существует.");
             return "redirect:/";
         }
 
@@ -69,7 +69,7 @@ public class JobApplicationController {
         applicationRepository.save(application);
 
         // FlashAttribute передает сообщение один раз при редиректе (сработает th:if="${success}")
-        redirectAttributes.addFlashAttribute("success", "Спасибо! Ваша заявка на вакансию '" + vacancy.getTitle() + "' успешно отправлена.");
+        redirectAttributes.addFlashAttribute("success_mess", "Спасибо! Ваша заявка на вакансию '" + vacancy.getTitle() + "' успешно отправлена.");
 
         return "redirect:/"; // После успешной отправки кидаем на главную
     }

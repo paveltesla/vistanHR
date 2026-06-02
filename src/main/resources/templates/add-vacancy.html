@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<nav th:replace="~{fragments :: navbar}"></nav>
+<nav th:replace="~{fragments :: navbar-admin}"></nav>
 
 <main class="container mt-4">
     <div class="row justify-content-center">
@@ -126,9 +126,7 @@
         </div>
     </div>
 </main>
-
 <footer th:replace="~{fragments :: footer}"></footer>
-
-<div th:replace="~{fragments :: scripts}"></div>
+<script th:replace="~{fragments :: script}"></script>
 </body>
 </html>

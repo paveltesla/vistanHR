@@ -32,7 +32,7 @@ public class AdminApplicationController {
         return "admin-index";
     }
 
-    @GetMapping
+    @GetMapping()
     public String listApplications(@RequestParam(required = false) Long vacancyId, Model model) {
         if (vacancyId != null) {
             model.addAttribute("applications", applicationService.getApplicationsByVacancy(vacancyId));
@@ -47,36 +47,42 @@ public class AdminApplicationController {
     public String reviewApplication(@PathVariable Long id, Model model, RedirectAttributes ra) {
         JobApplication app = applicationService.getApplicationById(id);
         if (app == null) {
-            ra.addFlashAttribute("error", "Отклик не найден");
+            ra.addFlashAttribute("error_mess", "Отклик не найден");
             return "redirect:/admin/applications";
         }
-        model.addAttribute("application", app);
+        model.addAttribute("applications", app);
         return "review-application";
     }
 
-    @PostMapping("/review/{id}")
+    @PostMapping("/review/update/{id}")
     public String updateStatus(@PathVariable Long id,
-                               @RequestParam("status") String status,
-                               @RequestParam(value = "reviewNotes", defaultValue = "") String reviewNotes,
+                               @ModelAttribute("applications") JobApplication formApp,
                                RedirectAttributes ra) {
-        JobApplication app = applicationService.getApplicationById(id);
-        if (app == null) {
-            ra.addFlashAttribute("error", "Отклик не найден");
+
+        // 1. Достаем оригинальный объект из H2 БД, чтобы не потерять данные, которых не было в форме (например, данные вакансии, email, phone)
+        JobApplication dbApp = applicationService.getApplicationById(id);
+        if (dbApp == null) {
+            ra.addFlashAttribute("error_mess", "Отклик не найден");
             return "redirect:/admin/applications";
         }
 
-        app.setApplicationStatus(status);
-        app.setReviewNotes(reviewNotes != null ? reviewNotes.trim() : "");
-        applicationService.saveApplication(app);
+        // 2. Обновляем только те поля, которые пришли из формы решения
+        dbApp.setApplicationStatus(formApp.getApplicationStatus());
+        dbApp.setReviewNotes(formApp.getReviewNotes() != null ? formApp.getReviewNotes().trim() : "");
 
-        ra.addFlashAttribute("success", "Статус изменен на: " + status);
+        // 3. Сохраняем обратно в БД (работает EntityManager.merge или save)
+        applicationService.saveApplication(dbApp);
+
+        ra.addFlashAttribute("success_mess", "Статус успешно изменен!");
+
+        // Редирект обратно на страницу этого же отклика
         return "redirect:/admin/applications/review/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String deleteApplication(@PathVariable Long id, RedirectAttributes ra) {
         applicationService.deleteApplication(id);
-        ra.addFlashAttribute("success", "Отклик удален!");
+        ra.addFlashAttribute("success_mess", "Отклик удален!");
         return "redirect:/admin/applications";
     }
 }
