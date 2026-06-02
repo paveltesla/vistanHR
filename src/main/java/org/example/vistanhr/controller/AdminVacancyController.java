@@ -39,7 +39,7 @@ public class AdminVacancyController {
                              BindingResult result, RedirectAttributes ra) {
         if (result.hasErrors()) return "add-vacancy";
         vacancyService.createVacancy(vacancy);
-        ra.addFlashAttribute("success", "Вакансия создана!");
+        ra.addFlashAttribute("success_mess", "Вакансия создана!");
         return "redirect:/admin/vacancies";
     }
 
@@ -47,7 +47,7 @@ public class AdminVacancyController {
     public String editVacancyForm(@PathVariable Long id, Model model, RedirectAttributes ra) {
         Vacancy vacancy = vacancyService.getVacancyById(id);
         if (vacancy == null) {
-            ra.addFlashAttribute("error", "Вакансия не найдена");
+            ra.addFlashAttribute("error_mess", "Вакансия не найдена");
             return "redirect:/admin/vacancies";
         }
         model.addAttribute("vacancy", vacancy);
@@ -60,21 +60,21 @@ public class AdminVacancyController {
                                 BindingResult result, RedirectAttributes ra) {
         if (result.hasErrors()) return "edit-vacancy";
         vacancyService.updateVacancy(id, vacancy);
-        ra.addFlashAttribute("success", "Вакансия обновлена!");
+        ra.addFlashAttribute("success_mess", "Вакансия обновлена!");
         return "redirect:/admin/vacancies";
     }
 
     @GetMapping("/close/{id}")
     public String closeVacancy(@PathVariable Long id, RedirectAttributes ra) {
         vacancyService.closeVacancy(id);
-        ra.addFlashAttribute("success", "Вакансия закрыта!");
+        ra.addFlashAttribute("success_mess", "Вакансия закрыта!");
         return "redirect:/admin/vacancies";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteVacancy(@PathVariable Long id, RedirectAttributes ra) {
         vacancyService.deleteVacancy(id);
-        ra.addFlashAttribute("success", "Вакансия удалена!");
+        ra.addFlashAttribute("success_mess", "Вакансия удалена!");
         return "redirect:/admin/vacancies";
     }
 
@@ -82,7 +82,7 @@ public class AdminVacancyController {
     public String vacancyApplications(@PathVariable Long id, Model model, RedirectAttributes ra) {
         Vacancy vacancy = vacancyService.getVacancyById(id);
         if (vacancy == null) {
-            ra.addFlashAttribute("error", "Вакансия не найдена");
+            ra.addFlashAttribute("error_mess", "Вакансия не найдена");
             return "redirect:/admin/vacancies";
         }
         model.addAttribute("vacancy", vacancy);

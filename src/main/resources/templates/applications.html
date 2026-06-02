@@ -8,12 +8,12 @@
 <body>
 
 <!-- Подключаем нашу общую правильную шапку -->
-<nav th:replace="~{fragments :: navbar}"></nav>
+<nav th:replace="~{fragments :: navbar-admin}"></nav>
 
 <main class="container mt-4">
     <!-- Уведомления об операциях (например, после удаления отклика) -->
-    <div th:if="${success}" class="alert alert-success shadow-sm"><span th:text="${success}"></span></div>
-    <div th:if="${error}" class="alert alert-danger shadow-sm"><span th:text="${error}"></span></div>
+    <div th:if="${success_mess}" class="alert alert-success shadow-sm"><span th:text="${success_mess}"></span></div>
+    <div th:if="${error_mess}" class="alert alert-danger shadow-sm"><span th:text="${error_mess}"></span></div>
 
     <div class="card shadow">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -24,7 +24,7 @@
                 <span th:unless="${filterVacancy != null}">Все входящие отклики</span>
             </h4>
             <!-- ИСПРАВЛЕНО: Ссылка сброса фильтра ведет на правильный админский путь -->
-            <a th:if="${filterVacancy != null}" href="/admin/applications" class="btn btn-light btn-sm">
+            <a th:if="${filterVacancy != null}" th:href="@{/admin/applications}" class="btn btn-light btn-sm">
                 <i class="fas fa-list"></i> Показать все
             </a>
         </div>
@@ -103,7 +103,6 @@
 
 <!-- Подключаем наш общий прижатый подвал -->
 <footer th:replace="~{fragments :: footer}"></footer>
-
-<div th:replace="~{fragments :: scripts}"></div>
+<script th:replace="~{fragments :: script}"></script>
 </body>
 </html>
