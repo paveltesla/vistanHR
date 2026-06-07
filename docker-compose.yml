@@ -15,3 +15,5 @@ services:
 
 volumes:
   pgdata:
+
+    #type in terminal of project "docker-compose up -d" for initialize the DB
