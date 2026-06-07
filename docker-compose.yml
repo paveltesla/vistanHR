@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:17
+    container_name: vistanhr-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: vistanhr_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
