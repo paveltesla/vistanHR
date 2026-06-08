@@ -92,10 +92,17 @@
                                       placeholder="Перечислите ваши ключевые навыки..."></textarea>
                         </div>
 
+                        <!-- Было поле Сопроводительное письмо, теперь уровень образования -->
                         <div class="mb-3">
-                            <label class="form-label">Сопроводительное письмо</label>
-                            <textarea th:field="*{coverLetter}" class="form-control" rows="4"
-                                      placeholder="Расскажите о себе и почему вы хотите работать в компании Вистан..."></textarea>
+                            <label class="form-label fw-bold">Уровень образования *</label>
+                            <select th:field="*{educationLevel}" class="form-select" required>
+                                <option value="NOT_SPECIFIED">Выберите уровень образования...</option>
+                                <option value="PTO">Профессионально-техническое (ПТО)</option>
+                                <option value="SSO">Среднее специальное (ССО)</option>
+                                <option value="HE">Высшее образование (ВО)</option>
+                                <option value="POSTGRADUATE">Магистратура / Аспирантура</option>
+                            </select>
+                            <div class="text-danger" th:if="${#fields.hasErrors('educationLevel')}" th:errors="*{educationLevel}"></div>
                         </div>
 
                         <div class="mb-3">

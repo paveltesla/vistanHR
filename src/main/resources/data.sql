@@ -1,4 +1,3 @@
--- 1. НАПОЛНЕНИЕ ТАБЛИЦЫ ВАКАНСИЙ
 -- 1. НАПОЛНЕНИЕ ТАБЛИЦЫ ВАКАНСИЙ (ЯВНО УКАЗЫВАЕМ ID)
 INSERT INTO vacancies (id, title, department, vacancy_type, description, requirements, responsibilities, salary_min,
                        salary_max, required_experience, work_schedule, employment_type, location, created_date, status,

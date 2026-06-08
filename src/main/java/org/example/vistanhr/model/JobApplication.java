@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JobApplication {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "education_level")
+    private EducationLevel educationLevel = EducationLevel.NOT_SPECIFIED;
 
     public static final String STATUS_PENDING = "PENDING";
     public static final String STATUS_REVIEWED = "REVIEWED";
@@ -68,5 +71,8 @@ public class JobApplication {
 
     @Column(name = "position")
     private String position;
+
+    public EducationLevel getEducationLevel() { return educationLevel; }
+    public void setEducationLevel(EducationLevel educationLevel) { this.educationLevel = educationLevel; }
 
 }

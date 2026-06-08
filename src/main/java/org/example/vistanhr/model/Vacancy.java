@@ -13,6 +13,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Vacancy {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "required_education")
+    private EducationLevel requiredEducation = EducationLevel.NOT_SPECIFIED;
+
+    public EducationLevel getRequiredEducation() {
+        return requiredEducation;
+    }
+    public void setRequiredEducation(EducationLevel requiredEducation) {
+        this.requiredEducation = requiredEducation;
+    }
 
     public static final String STATUS_OPEN = "OPEN";
     public static final String STATUS_CLOSED = "CLOSED";
