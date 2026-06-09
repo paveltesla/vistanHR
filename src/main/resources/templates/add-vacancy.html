@@ -97,14 +97,16 @@
                             <textarea th:field="*{description}" class="form-control" rows="3" placeholder="Краткая информация о вакансии..."></textarea>
                         </div>
 
+                        <!-- Вместо требований и обязанностей — выпадающий список образования -->
                         <div class="mb-3">
-                            <label class="form-label">Требования к кандидату</label>
-                            <textarea th:field="*{requirements}" class="form-control" rows="3" placeholder="Разряд, чтение чертежей, знание оборудования..."></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Обязанности</label>
-                            <textarea th:field="*{responsibilities}" class="form-control" rows="3" placeholder="Что нужно будет делать..."></textarea>
+                            <label class="form-label fw-bold">Требуемый уровень образования кандидата *</label>
+                            <select th:field="*{requiredEducation}" class="form-select" required>
+                                <option value="NOT_SPECIFIED">Не имеет значения / Любое</option>
+                                <option value="PTO">Профессионально-техническое (ПТО)</option>
+                                <option value="SSO">Среднее специальное (ССО)</option>
+                                <option value="HE">Высшее образование (ВО)</option>
+                            </select>
+                            <div class="text-danger" th:if="${#fields.hasErrors('requiredEducation')}" th:errors="*{requiredEducation}"></div>
                         </div>
 
                         <div class="mb-3">

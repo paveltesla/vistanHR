@@ -126,9 +126,16 @@
                         </tr>
                     </table>
 
-                    <div th:if="${applications.coverLetter != null and !applications.coverLetter.isEmpty()}" class="mt-4">
-                        <h5 class="mb-3 text-primary"><i class="fas fa-envelope-open-text"></i> Сопроводительное письмо</h5>
-                        <div class="p-3 bg-light rounded border" style="white-space: pre-wrap;" th:text="${applications.coverLetter}"></div>
+                    <!-- Изменяем блок отображения образования в карточке соискателя -->
+                    <div class="mt-4">
+                        <h5 class="mb-3 text-primary"><i class="fas fa-graduation-cap"></i> Уровень образования кандидата</h5>
+                        <div class="p-3 bg-light rounded border">
+
+                            <span class="badge bg-primary fs-6"
+                                  th:if="${applications.educationLevel != null}"
+                                  th:text="${applications.educationLevel.displayName}">Не указано</span>
+                            <span class="text-muted" th:unless="${applications.educationLevel != null}">Не указано</span>
+                        </div>
                     </div>
 
                     <div th:if="${applications.resume != null and !applications.resume.isEmpty()}" class="mt-4">
