@@ -20,14 +20,14 @@
                     <form th:action="@{/admin/vacancies/add}" th:object="${vacancy}" method="post">
 
                         <div class="mb-3">
-                            <label class="form-label">Название вакансии *</label>
+                            <label class="form-label">Название вакансии</label>
                             <input type="text" th:field="*{title}" class="form-control" placeholder="Например: Токарь-карусельщик" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Подразделение / Цех *</label>
+                                <label class="form-label">Подразделение / Цех</label>
                                 <select th:field="*{department}" class="form-select" required>
                                     <option value="">Выберите подразделение...</option>
                                     <option value="Механический цех">Механический цех</option>
